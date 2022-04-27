@@ -1,6 +1,8 @@
 '''Train CIFAR10 with PyTorch.'''
 from __future__ import print_function
 import os
+
+from models.resnet import resnet18
 os.environ['CUDA_LAUNCH_BLOCKING'] = "1"
 import time
 from time import sleep
@@ -21,7 +23,9 @@ import sys
 cwd = os.getcwd()
 model_dir = os.path.join(cwd, 'models')
 sys.path.append(model_dir)
+
 from models import *
+
 from utils import progress_bar
 from tensorboardX import SummaryWriter
 from random import randint
@@ -64,7 +68,13 @@ transform_test = transforms.Compose([
 
 BatchSize = args.batch_size
 
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
+
+# trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
+
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=BatchSize, shuffle=True, num_workers=2)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)

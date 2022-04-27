@@ -130,6 +130,7 @@ class ResNet(nn.Module):
         self._norm_layer = nn.BatchNorm2d
 
         self.inplanes = 64
+        self.inchannel = 64
         self.dilation = 1
         if replace_stride_with_dilation is None:
             # each element in the tuple indicates if we should replace
@@ -172,6 +173,15 @@ class ResNet(nn.Module):
                     nn.init.constant_(m.bn3.weight, 0)
                 elif isinstance(m, BasicBlock):
                     nn.init.constant_(m.bn2.weight, 0)
+
+    
+    def _make_layer(self, block, channels, num_blocks, stride=None, dilate=None):
+        strides = [stride] + [1] * (num_blocks - 1)   #strides=[1,1]
+        layers = []
+        for stride in strides:
+            layers.append(block(self.inchannel, channels, stride))
+            self.inchannel = channels
+        return nn.Sequential(*layers)
 
 
 def resnet18(pretrained=False, **kwargs):

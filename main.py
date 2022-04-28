@@ -212,7 +212,13 @@ def test(epoch):
         best_acc = acc
 
 
-for epoch in range(start_epoch, int(100*3.5)):
-    train(epoch)
-    scheduler.step()
-    test(epoch)
+# for epoch in range(start_epoch, int(100*3.5)):
+#     train(epoch)
+#     scheduler.step()
+#     test(epoch)
+
+if __name__ == '__main__':
+    for epoch in range(start_epoch, int(100*3.5)):
+        train(epoch)
+        scheduler.step()
+        test(epoch)
